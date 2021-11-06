@@ -20,24 +20,33 @@ Json = Any
     max_tries=3,
 )
 def request_chunk(
-    username: str, *, count: int = 100, max_ts: Optional[int] = None
+    username: str,
+    *,
+    count: int = 100,
+    max_ts: Optional[int] = None,
+    logger: Optional[logging.Logger] = None,
 ) -> List[Json]:
     params: Dict[str, Any] = {}
     if max_ts is not None:
         params["max_ts"] = max_ts
     params["count"] = count
     r = requests.get(BASE_LISTENBRAINZ_URL.format(username=username), params=params)
+    if logger:
+        logger.debug(f"Requesting {r.url}")
     r.raise_for_status()
     data = r.json()
     listens: List[Json] = data["payload"]["listens"]
     return listens
 
 
-def request_all_listens(username: str, logger: logging.Logger = logzero.logger) -> Json:
+def request_listens(
+    username: str, logger: logging.Logger = logzero.logger, pages: Optional[int] = None
+) -> Json:
     max_ts: Optional[int] = None
     all_listens: List[Json] = []
+    curpage = 0
     while True:
-        new_listens = request_chunk(username, max_ts=max_ts)
+        new_listens = request_chunk(username, max_ts=max_ts, logger=logger)
         all_listens.extend(new_listens)
         if len(new_listens) == 0:  # exhausted all paginations
             break
@@ -45,4 +54,7 @@ def request_all_listens(username: str, logger: logging.Logger = logzero.logger) 
         logger.debug(
             f"Have {len(all_listens)}, now searching for listens before {datetime.utcfromtimestamp(max_ts)}..."
         )
+        curpage += 1
+        if pages is not None and curpage >= pages:
+            break
     return all_listens

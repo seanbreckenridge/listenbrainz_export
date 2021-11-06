@@ -22,6 +22,12 @@ Provide your listenbrainz username -- prints results to STDOUT
 listenbrainz_export seanbreckenridge > ./data.json
 ```
 
+Can also only request a few pages:
+
+```
+listenbrainz_export seanbreckenridge --pages 3
+```
+
 `listenbrainz_export.parse` includes a model of the data and some functions to parse them into python objects, like:
 
 ```python
