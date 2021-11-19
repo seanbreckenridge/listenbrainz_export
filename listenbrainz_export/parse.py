@@ -4,6 +4,7 @@ from typing import Optional, NamedTuple, Any, Dict, List, Iterator
 
 DATE_REGEX = "%a, %d %b %Y %H:%M:%S %Z"
 
+Json = Dict[str, Any]
 
 class Listen(NamedTuple):
     track_name: str
@@ -11,46 +12,48 @@ class Listen(NamedTuple):
     # could be null if you're currently listening to something
     listened_at: Optional[datetime]
     inserted_at: Optional[datetime]
+    recording_id: Optional[str]
     release_name: Optional[str]
-    recording_mbid: Optional[str]
-    artist_mbids: List[str]
-    release_mbid: Optional[str]
-    tags: List[str]
-    release_group_mbid: Optional[str]
-    work_mbids: List[str]
-    tracknumber: Optional[int]
-    spotify_id: Optional[str]
-    listening_from: Optional[str]
-    isrc: Optional[str]
+    metadata: Json
     username: Optional[str]
 
     @classmethod
     def from_blob(cls, blob: Dict[str, Any]) -> "Listen":
-        track_metadata = blob["track_metadata"]
-        listened_at: Optional[int] = blob.get("listened_at")
-        inserted_at: Optional[str] = blob.get("inserted_at")
-        additional_info = track_metadata.get("additional_info", {})
+        # this works by using 'pop's on the dictioanry to slowly
+        # decompose them without running into possible errors,
+        # and taking any remaining data left over in the typical
+        # structure and merging them into the 'metadata' blob,
+        # since theres so many possible keys on this object
+        #
+        # just extracts the most useful stuff and attaches the
+        # rest onto metadata
+        track_metadata = blob.pop("track_metadata", {})
+        listened_at: Optional[int] = blob.pop("listened_at", None)
+        inserted_at: Optional[str] = blob.pop("inserted_at", None)
+        recording_id: Optional[str] = blob.pop("recording_msid", None)
+        username: Optional[str] = blob.pop("user_name", None)
+        release_name = track_metadata.pop("release_name", None)
+        artist_name: str = track_metadata.pop("artist_name", "<unknown>")
+        track_name: str = track_metadata.pop("track_name", "<unknown>")
+        # merge all other additional info into the JSON object
+        metadata: Json = {}
+        additional_info = track_metadata.pop("additional_info", {})
+        metadata.update(additional_info)
+        metadata.update(track_metadata)
+        metadata.update(blob)
         return cls(
-            track_name=track_metadata["track_name"],
-            artist_name=track_metadata["artist_name"],
+            track_name=track_name,
+            artist_name=artist_name,
             listened_at=datetime.fromtimestamp(listened_at)
             if listened_at is not None
             else None,
             inserted_at=datetime.strptime(inserted_at, DATE_REGEX)
             if inserted_at is not None
             else None,
-            release_name=track_metadata.get("release_name"),
-            recording_mbid=additional_info.get("recording_mbid"),
-            artist_mbids=additional_info.get("artist_mbids", []),
-            release_mbid=additional_info.get("release_mbid"),
-            tags=additional_info.get("tags", []),
-            release_group_mbid=additional_info.get("release_group_mbid"),
-            work_mbids=additional_info.get("work_mbids", []),
-            tracknumber=additional_info.get("tracknumber"),
-            spotify_id=additional_info.get("spotify_id"),
-            listening_from=additional_info.get("listening_from"),
-            isrc=additional_info.get("isrc"),
-            username=blob.get("username"),
+            recording_id=recording_id,
+            release_name=release_name,
+            metadata=metadata,
+            username=username,
         )
 
 
