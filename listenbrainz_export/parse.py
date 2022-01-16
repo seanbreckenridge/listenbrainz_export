@@ -19,7 +19,7 @@ class Listen(NamedTuple):
 
     @classmethod
     def from_blob(cls, blob: Dict[str, Any]) -> "Listen":
-        # this works by using 'pop's on the dictioanry to slowly
+        # this works by using 'pop's on the dictionary to slowly
         # decompose them without running into possible errors,
         # and taking any remaining data left over in the typical
         # structure and merging them into the 'metadata' blob,
