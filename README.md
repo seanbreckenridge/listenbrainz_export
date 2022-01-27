@@ -6,7 +6,7 @@ Since the data is public, no API key/Authentication is required.
 
 ## Installation
 
-Requires `python3.6+`
+Requires `python3.7+`
 
 To install with pip, run:
 
