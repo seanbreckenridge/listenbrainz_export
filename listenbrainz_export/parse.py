@@ -1,5 +1,5 @@
 import json
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Optional, NamedTuple, Any, Dict, List, Iterator
 
 DATE_REGEX = "%a, %d %b %Y %H:%M:%S %Z"
@@ -44,7 +44,7 @@ class Listen(NamedTuple):
         return cls(
             track_name=track_name,
             artist_name=artist_name,
-            listened_at=datetime.fromtimestamp(listened_at)
+            listened_at=datetime.fromtimestamp(listened_at, tz=timezone.utc)
             if listened_at is not None
             else None,
             inserted_at=datetime.strptime(inserted_at, DATE_REGEX)
