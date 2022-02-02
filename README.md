@@ -35,7 +35,7 @@ listenbrainz_export seanbreckenridge --pages 3
 Listen(track_name='Skate', artist_name='Bruno Mars, Anderson .Paak & Silk Sonic', listened_at=datetime.datetime(2021, 11, 6, 19, 10, 49), inserted_at=datetime.datetime(2021, 11, 7, 2, 12, 31), recording_id='e60b9417-acfe-4796-a048-76208fb4a9ad', release_name='Skate - Single', metadata={'artist_msid': 'df6f6937-5de3-4e3c-bd74-1991ed92abd5', 'recording_msid': 'e60b9417-acfe-4796-a048-76208fb4a9ad', 'release_msid': 'dcf6d703-1e95-4e9c-8218-bb7c3b3bfa0b'}, username='seanbreckenridge')
 ```
 
-I use this almost exclusively through my [HPI module](https://github.com/seanbreckenridge/HPI/blob/master/my/listenbrainz.py)
+I use this almost exclusively through my [HPI](https://github.com/seanbreckenridge/HPI); that locates my exports on disks and removes any duplicate scrobbles
 
 ### Tests
 
