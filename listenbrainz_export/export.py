@@ -10,10 +10,7 @@ BASE_LISTENBRAINZ_URL = "https://api.listenbrainz.org/1/user/{username}/listens"
 
 Json = Any
 
-# paginate through listens for a user, by specifying an epoch time
-# to receive scrobbles before
-# once we receive the first chunk of scrobbles, use the epoch time of the
-# last currently known scrobbles, and filter anything that was posted before that
+
 @backoff.on_exception(
     lambda: backoff.constant(interval=10),
     exception=requests.RequestException,
@@ -26,6 +23,12 @@ def request_chunk(
     max_ts: Optional[int] = None,
     logger: Optional[logging.Logger] = None,
 ) -> List[Json]:
+    """
+    paginate through listens for a user, by specifying an epoch time
+    to receive scrobbles before
+    once we receive the first chunk of scrobbles, use the epoch time of the
+    last currently known scrobbles, and filter anything that was posted before that
+    """
     params: Dict[str, Any] = {}
     if max_ts is not None:
         params["max_ts"] = max_ts

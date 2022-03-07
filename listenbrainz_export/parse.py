@@ -6,6 +6,7 @@ DATE_REGEX = "%a, %d %b %Y %H:%M:%S %Z"
 
 Json = Dict[str, Any]
 
+
 class Listen(NamedTuple):
     track_name: str
     artist_name: str

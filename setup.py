@@ -26,6 +26,7 @@ setup(
     extras_require={
         "testing": [
             "mypy",
+            "flake8",
         ]
     },
     classifiers=[

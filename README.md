@@ -44,4 +44,5 @@ git clone 'https://github.com/seanbreckenridge/listenbrainz_export'
 cd ./listenbrainz_export
 pip install '.[testing]'
 mypy ./listenbrainz_export
+flake8 ./listenbrainz_export
 ```
