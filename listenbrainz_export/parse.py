@@ -6,6 +6,7 @@ DATE_REGEX = "%a, %d %b %Y %H:%M:%S %Z"
 
 Json = Dict[str, Any]
 
+
 def _parse_date(s: Union[str, int, None]) -> Optional[datetime]:
     if s is None:
         return None
@@ -15,7 +16,6 @@ def _parse_date(s: Union[str, int, None]) -> Optional[datetime]:
         return datetime.strptime(s, DATE_REGEX)
     else:
         raise ValueError(f"Not sure how to parse date {s} {type(s)}")
-
 
 
 class Listen(NamedTuple):
