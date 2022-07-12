@@ -1,10 +1,21 @@
 import json
 from datetime import datetime, timezone
-from typing import Optional, NamedTuple, Any, Dict, List, Iterator
+from typing import Optional, NamedTuple, Any, Dict, List, Iterator, Union
 
 DATE_REGEX = "%a, %d %b %Y %H:%M:%S %Z"
 
 Json = Dict[str, Any]
+
+def _parse_date(s: Union[str, int, None]) -> Optional[datetime]:
+    if s is None:
+        return None
+    if isinstance(s, int):
+        return datetime.fromtimestamp(s, tz=timezone.utc)
+    elif isinstance(s, str):
+        return datetime.strptime(s, DATE_REGEX)
+    else:
+        raise ValueError(f"Not sure how to parse date {s} {type(s)}")
+
 
 
 class Listen(NamedTuple):
@@ -45,12 +56,8 @@ class Listen(NamedTuple):
         return cls(
             track_name=track_name,
             artist_name=artist_name,
-            listened_at=datetime.fromtimestamp(listened_at, tz=timezone.utc)
-            if listened_at is not None
-            else None,
-            inserted_at=datetime.strptime(inserted_at, DATE_REGEX)
-            if inserted_at is not None
-            else None,
+            listened_at=_parse_date(listened_at),
+            inserted_at=_parse_date(inserted_at),
             recording_id=recording_id,
             release_name=release_name,
             metadata=metadata,
