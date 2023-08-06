@@ -31,7 +31,8 @@ def request_playing_now(
         logger.debug(f"Requesting {r.url}")
     r.raise_for_status()
     data = r.json()
-    return data["payload"]["listens"]
+    listens: list[Any] = data["payload"]["listens"]
+    return listens
 
 
 @backoff.on_exception(
