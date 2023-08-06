@@ -8,7 +8,30 @@ import logzero  # type: ignore[import]
 
 BASE_LISTENBRAINZ_URL = "https://api.listenbrainz.org/1/user/{username}/listens"
 
+BASE_PLAYING_NOW_URL = "https://api.listenbrainz.org/1/user/{username}/playing-now"
+
 Json = Any
+
+
+@backoff.on_exception(
+    lambda: backoff.constant(interval=10),
+    exception=requests.RequestException,
+    max_tries=3,
+)
+def request_playing_now(
+    username: str,
+    *,
+    logger: Optional[logging.Logger] = None,
+) -> List[Json]:
+    """
+    request the currently playing song, if any
+    """
+    r = requests.get(BASE_PLAYING_NOW_URL.format(username=username))
+    if logger:
+        logger.debug(f"Requesting {r.url}")
+    r.raise_for_status()
+    data = r.json()
+    return data["payload"]["listens"]
 
 
 @backoff.on_exception(

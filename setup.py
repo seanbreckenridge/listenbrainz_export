@@ -7,7 +7,7 @@ reqs = Path("requirements.txt").read_text().strip().splitlines()
 pkg = "listenbrainz_export"
 setup(
     name=pkg,
-    version="0.1.0",
+    version="0.2.0",
     url="https://github.com/seanbreckenridge/listenbrainz_export",
     author="Sean Breckenridge",
     author_email="seanbrecke@gmail.com",

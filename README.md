@@ -17,13 +17,13 @@ To install with pip, run:
 Provide your listenbrainz username -- prints results to STDOUT
 
 ```
-listenbrainz_export seanbreckenridge > ./data.json
+listenbrainz_export export seanbreckenridge > ./data.json
 ```
 
 Can also only request a few pages:
 
 ```
-listenbrainz_export seanbreckenridge --pages 3
+listenbrainz_export export seanbreckenridge --pages 3
 ```
 
 [`listenbrainz_export.parse`](./listenbrainz_export/parse.py) includes a model of the data and some functions to parse them into python objects, like:
@@ -36,6 +36,16 @@ Listen(track_name='Skate', artist_name='Bruno Mars, Anderson .Paak & Silk Sonic'
 ```
 
 I use this almost exclusively through my [HPI](https://github.com/seanbreckenridge/HPI); that locates my exports on disks and removes any duplicate scrobbles
+
+This also includes a `playing-now` command, which prints the currently playing track, if any:
+
+```
+listenbrainz_export playing-now seanbreckenridge
+```
+
+That returns a JSON list, since you can have multiple songs playing at the same time).
+
+The return code is 0 if there is a song playing, 1 if there is no song playing.
 
 ### Tests
 

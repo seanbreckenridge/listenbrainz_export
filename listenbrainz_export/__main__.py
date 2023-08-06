@@ -3,15 +3,35 @@ from typing import Optional
 
 import click
 
-from .export import request_listens
+from .export import request_listens, request_playing_now
 
 
-@click.command()
+@click.group()
+def main() -> None:
+    pass
+
+
+@main.command()
+@click.argument("LISTENBRAINZ_USERNAME")
+def playing_now(listenbrainz_username: str) -> None:
+    """
+    Downloads your currently playing track from listenbrainz
+    """
+    data = request_playing_now(username=listenbrainz_username)
+    click.echo(json.dumps(data))
+    exit(0 if len(data) else 1)
+
+
+@main.command()
 @click.option(
-    "--pages", type=int, default=None, help="Request these many pages of your history"
+    "-p",
+    "--pages",
+    type=int,
+    default=None,
+    help="Request these many pages of your history",
 )
 @click.argument("LISTENBRAINZ_USERNAME")
-def main(pages: Optional[int], listenbrainz_username: str) -> None:
+def export(pages: Optional[int], listenbrainz_username: str) -> None:
     """
     Downloads all scrobbles for your listenbrainz account
     """
