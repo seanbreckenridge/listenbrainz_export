@@ -31,7 +31,7 @@ def request_playing_now(
         logger.debug(f"Requesting {r.url}")
     r.raise_for_status()
     data = r.json()
-    listens: list[Any] = data["payload"]["listens"]
+    listens: List[Any] = data["payload"]["listens"]
     return listens
 
 
