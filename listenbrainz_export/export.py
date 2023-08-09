@@ -1,6 +1,6 @@
 import logging
 from typing import Optional, List, Dict, Any
-from datetime import datetime
+from datetime import datetime, timedelta
 
 import requests
 import backoff  # type: ignore[import]
@@ -67,7 +67,10 @@ def request_chunk(
 
 
 def request_listens(
-    username: str, logger: logging.Logger = logzero.logger, pages: Optional[int] = None
+        username: str,
+        logger: logging.Logger = logzero.logger,
+        pages: Optional[int] = None,
+        days: Optional[int] = None
 ) -> Json:
     max_ts: Optional[int] = None
     all_listens: List[Json] = []
@@ -82,6 +85,8 @@ def request_listens(
             f"Have {len(all_listens)}, now searching for listens before {datetime.utcfromtimestamp(max_ts)}..."
         )
         curpage += 1
-        if pages is not None and curpage >= pages:
+        if ((pages is not None and curpage >= pages)
+            or (days is not None
+                and (datetime.utcfromtimestamp(max_ts) < datetime.utcnow() - timedelta(days=days)))):
             break
     return all_listens
