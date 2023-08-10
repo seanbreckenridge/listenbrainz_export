@@ -37,11 +37,17 @@ def playing_now(listenbrainz_username: str) -> None:
     help="Request listens no older than this many days",
 )
 @click.argument("LISTENBRAINZ_USERNAME")
-def export(pages: Optional[int], days: Optional[int], listenbrainz_username: str) -> None:
+def export(
+    pages: Optional[int], days: Optional[int], listenbrainz_username: str
+) -> None:
     """
     Downloads all scrobbles for your listenbrainz account
     """
-    click.echo(json.dumps(request_listens(username=listenbrainz_username, pages=pages, days=days)))
+    click.echo(
+        json.dumps(
+            request_listens(username=listenbrainz_username, pages=pages, days=days)
+        )
+    )
 
 
 if __name__ == "__main__":

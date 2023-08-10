@@ -67,10 +67,10 @@ def request_chunk(
 
 
 def request_listens(
-        username: str,
-        logger: logging.Logger = logzero.logger,
-        pages: Optional[int] = None,
-        days: Optional[int] = None
+    username: str,
+    logger: logging.Logger = logzero.logger,
+    pages: Optional[int] = None,
+    days: Optional[int] = None,
 ) -> Json:
     max_ts: Optional[int] = None
     all_listens: List[Json] = []
@@ -87,6 +87,8 @@ def request_listens(
         curpage += 1
         if pages is not None and curpage >= pages:
             break
-        if days is not None and (datetime.utcfromtimestamp(max_ts) < datetime.utcnow() - timedelta(days=days)):
+        if days is not None and (
+            datetime.utcfromtimestamp(max_ts) < datetime.utcnow() - timedelta(days=days)
+        ):
             break
     return all_listens
