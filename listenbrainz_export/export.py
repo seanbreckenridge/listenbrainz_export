@@ -85,8 +85,8 @@ def request_listens(
             f"Have {len(all_listens)}, now searching for listens before {datetime.utcfromtimestamp(max_ts)}..."
         )
         curpage += 1
-        if ((pages is not None and curpage >= pages)
-            or (days is not None
-                and (datetime.utcfromtimestamp(max_ts) < datetime.utcnow() - timedelta(days=days)))):
+        if pages is not None and curpage >= pages:
+            break
+        if days is not None and (datetime.utcfromtimestamp(max_ts) < datetime.utcnow() - timedelta(days=days)):
             break
     return all_listens
