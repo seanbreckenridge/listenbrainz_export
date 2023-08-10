@@ -26,6 +26,13 @@ Can also only request a few pages:
 listenbrainz_export export seanbreckenridge --pages 3
 ```
 
+Or can request only recent listens:
+
+```
+listenbrainz_export export seanbreckenridge --days 30
+```
+
+
 [`listenbrainz_export.parse`](./listenbrainz_export/parse.py) includes a model of the data and some functions to parse them into python objects, like:
 
 ```python
