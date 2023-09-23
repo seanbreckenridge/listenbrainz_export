@@ -35,7 +35,7 @@ class Listen(NamedTuple):
         # decompose them without running into possible errors,
         # and taking any remaining data left over in the typical
         # structure and merging them into the 'metadata' blob,
-        # since theres so many possible keys on this object
+        # since there's so many possible keys on this object
         #
         # just extracts the most useful stuff and attaches the
         # rest onto metadata
